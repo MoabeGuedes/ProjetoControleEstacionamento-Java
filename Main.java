@@ -59,12 +59,12 @@ public class Main
                 do {
                     valor = lerDouble();
                     hora = (int) valor;
+                    //Perguntar se pode usar math, aqui estamos arredondando o valor para evitar 00.59
                     minutos = (int) Math.round((valor - hora) * 100);
 
                     if (hora < 0 || hora > 23 || minutos < 0 || minutos > 59) {
                         imprime("Horário inválido!");
                     }
-
                 } while (hora < 0 || hora > 23 || minutos < 0 || minutos > 59);
                 vetorHorario[i] = valor;
                 break;
@@ -138,9 +138,9 @@ public class Main
                         if (escolha == 1) {
                             registrarEntradaVeiculo(carroPequeno, placasCarroPequeno, horariosEntradaCarroPequeno);
                         } else if (escolha == 2) {
-                            //registrarEntradaVeiculo();
+                            registrarEntradaVeiculo(carroGrande, placasCarroGrande, horariosEntradaCarroGrande);
                         } else if (escolha == 3) {
-                            //registrarEntradaVeiculo();
+                            registrarEntradaVeiculo(moto, placasMoto, horariosEntradaMoto);
                         } else {
                             imprime("Veículo inválido!");
                         }
