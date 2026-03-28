@@ -77,7 +77,6 @@ public class Main
                             imprime("Veículo inválido!");
                         }
                     } while (escolha < 1 || escolha > 3);
-
                     break;
                 case 2:
                     registrarEntradaVeiculo();
