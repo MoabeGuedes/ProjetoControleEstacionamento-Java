@@ -38,7 +38,7 @@ public class Main
             break;
         }
         imprime("Informe a placa");
-        for(int i = 0;i < vetoRegistro.length; i++ ){
+        for(int i = 0;i < vetorRegistro.length; i++ ){
             if(vetorPlaca[i] == null){
                 vetorPlaca[i] = lerString();
                 break;
@@ -108,9 +108,9 @@ public class Main
                         if (escolha == 1) {
                             registrarEntradaVeiculo(carroPequeno, placasCarroPequeno, horariosEntradaCarroPequeno);
                         } else if (escolha == 2) {
-                            registrarEntradaVeiculo();
+                            //registrarEntradaVeiculo();
                         } else if (escolha == 3) {
-                            registrarEntradaVeiculo();
+                            //registrarEntradaVeiculo();
                         } else {
                             imprime("Veículo inválido!");
                         }
