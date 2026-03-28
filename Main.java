@@ -150,11 +150,6 @@ public class Main
                     } while (escolha < 1 || escolha > 3);
                     break;
                 case 3:
-                    for (int i = 0; i < carroGrande.length; i++) {
-                        System.out.println(carroGrande[i]);
-                        System.out.println(placasCarroGrande[i]);
-                        System.out.println(horariosEntradaCarroGrande[i]);
-                    }
                     //registrarSaidaVeiculo();
                     break;
                 case 4:
