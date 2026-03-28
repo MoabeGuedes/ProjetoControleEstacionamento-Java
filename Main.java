@@ -37,10 +37,36 @@ public class Main
             }
             break;
         }
-        imprime("Informe a placa");
+        imprime("Informe a placa: ");
         for(int i = 0;i < vetorRegistro.length; i++ ){
             if(vetorPlaca[i] == null){
-                vetorPlaca[i] = lerString();
+                do{
+                    vetorPlaca[i] = lerString();
+                    //perguntar se pode usar o charAt para validar a placa
+                    if (vetorPlaca[i] == "") {
+                         imprime("Placa inválida!\n");
+                    }
+                }while((vetorPlaca[i].isEmpty()));
+                break;
+            }
+            break;
+        }
+        imprime("Informe o horário de entrada nesse formato: 00h.00min ");
+        for (int i = 0; i < vetorHorario.length; i++) {
+            if(vetorHorario[i] == 0.0){
+                double valor;
+                int hora, minutos;
+                do {
+                    valor = lerDouble();
+                    hora = (int) valor;
+                    minutos = (int) Math.round((valor - hora) * 100);
+
+                    if (hora < 0 || hora > 23 || minutos < 0 || minutos > 59) {
+                        imprime("Horário inválido!");
+                    }
+
+                } while (hora < 0 || hora > 23 || minutos < 0 || minutos > 59);
+                vetorHorario[i] = valor;
                 break;
             }
             break;
@@ -78,6 +104,8 @@ public class Main
                     "6. Sair\n" +
                     "Selecione uma opção:");
             opcao = entrada.nextInt();
+            //LIMPA O BUFFER
+            entrada.nextLine();
             switch (opcao) {
                 case 1:
                     int escolha;
@@ -87,6 +115,8 @@ public class Main
                                 "2 - Carro Grande\n" +
                                 "3 - Moto");
                         escolha = lerInt();
+                        //LIMPA O BUFFER
+                        entrada.nextLine();
                         if (escolha == 1) {
                             cadastrarTarifas(valorTarifasCarroPequeno);
                         } else if (escolha == 2) {
