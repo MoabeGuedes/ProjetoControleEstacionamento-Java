@@ -15,6 +15,10 @@ public class Main
         Scanner entrada = new Scanner(System.in);
         return entrada.nextInt();
     }
+    public static String lerString(){
+        Scanner entrada = new Scanner(System.in);
+        return entrada.nextLine();
+    }
 
     // CADASTRAR TARIFAS - FUNCIONALIDADE 1
     public static void cadastrarTarifas(double vetor[]){
@@ -25,8 +29,22 @@ public class Main
     }
 
     // REGISTRAR ENTRADA DE VEÍCULO - FUNCIONALIDADE 2
-    public static void registrarEntradaVeiculo(){
-
+    public static void registrarEntradaVeiculo(int vetorRegistro[], String vetorPlaca[], double vetorHorario[]){
+        for(int i = 0;i < vetorRegistro.length; i++ ){
+            if(vetorRegistro[i] == 0){
+                vetorRegistro[i] == 1;
+                break;
+            }
+            break;
+        }
+        imprime("Informe a placa");
+        for(int i = 0;i < vetoRegistro.length; i++ ){
+            if(vetorPlaca[i] == null){
+                vetorPlaca[i] == lerString();
+                break;
+            }
+            break;
+        }
     }
     public static void main(String[] args) {
         int[] carroPequeno = new int[100];
@@ -81,7 +99,22 @@ public class Main
                     } while (escolha < 1 || escolha > 3);
                     break;
                 case 2:
-                    registrarEntradaVeiculo();
+                    do {
+                        imprime("- Escolha qual veículo quer resgistrar entrada -\n" +
+                                "1 - Carro pequeno\n" +
+                                "2 - Carro Grande\n" +
+                                "3 - Moto");
+                        escolha = lerInt();
+                        if (escolha == 1) {
+                            registrarEntradaVeiculo(carroPequeno, placasCarroPequeno, horariosEntradaCarroPequeno);
+                        } else if (escolha == 2) {
+                            registrarEntradaVeiculo();
+                        } else if (escolha == 3) {
+                            registrarEntradaVeiculo();
+                        } else {
+                            imprime("Veículo inválido!");
+                        }
+                    } while (escolha < 1 || escolha > 3);
                     break;
                 case 3:
                     //registrarSaidaVeiculo();
