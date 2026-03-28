@@ -29,48 +29,51 @@ public class Main
     }
 
     // REGISTRAR ENTRADA DE VEÍCULO - FUNCIONALIDADE 2
-    public static void registrarEntradaVeiculo(int vetorRegistro[], String vetorPlaca[], double vetorHorario[]){
-        for(int i = 0;i < vetorRegistro.length; i++ ){
-            if(vetorRegistro[i] == 0){
-                vetorRegistro[i] = 1;
+    public static void registrarEntradaVeiculo(int vetorRegistro[], String vetorPlaca[], double vetorHorario[]) {
+        int posicao = -1;
+        // 1. encontrar vaga livre
+        for (int i = 0; i < vetorRegistro.length; i++) {
+            if (vetorRegistro[i] == 0) {
+                posicao = i;
                 break;
             }
-            break;
         }
-        imprime("Informe a placa: ");
-        for(int i = 0;i < vetorRegistro.length; i++ ){
-            if(vetorPlaca[i] == null){
-                do{
-                    vetorPlaca[i] = lerString();
-                    //perguntar se pode usar o charAt para validar a placa
-                    if (vetorPlaca[i] == "") {
-                         imprime("Placa inválida!\n");
-                    }
-                }while((vetorPlaca[i].isEmpty()));
-                break;
-            }
-            break;
-        }
-        imprime("Informe o horário de entrada nesse formato: 00h.00min ");
-        for (int i = 0; i < vetorHorario.length; i++) {
-            if(vetorHorario[i] == 0.0){
-                double valor;
-                int hora, minutos;
-                do {
-                    valor = lerDouble();
-                    hora = (int) valor;
-                    //Perguntar se pode usar math, aqui estamos arredondando o valor para evitar 00.59
-                    minutos = (int) Math.round((valor - hora) * 100);
 
-                    if (hora < 0 || hora > 23 || minutos < 0 || minutos > 59) {
-                        imprime("Horário inválido!");
-                    }
-                } while (hora < 0 || hora > 23 || minutos < 0 || minutos > 59);
-                vetorHorario[i] = valor;
-                break;
-            }
-            break;
+        if (posicao == -1) {
+            imprime("Estacionamento lotado!");
+            return;
         }
+
+        // 2. ocupar vaga
+        vetorRegistro[posicao] = 1;
+
+        // 3. ler placa
+        String placa;
+        do {
+            imprime("Informe a placa: ");
+            placa = lerString();
+        } while (placa.isEmpty());
+
+        vetorPlaca[posicao] = placa;
+
+        // 4. ler horário
+        double valor;
+        int hora, minutos;
+
+        do {
+            imprime("Informe o horário (00.00): ");
+            valor = lerDouble();
+
+            hora = (int) valor;
+            minutos = (int) Math.round((valor - hora) * 100);
+
+            if (hora < 0 || hora > 23 || minutos < 0 || minutos > 59) {
+                imprime("Horário inválido!");
+            }
+
+        } while (hora < 0 || hora > 23 || minutos < 0 || minutos > 59);
+
+        vetorHorario[posicao] = valor;
     }
     public static void main(String[] args) {
         int[] carroPequeno = new int[100];
@@ -147,6 +150,11 @@ public class Main
                     } while (escolha < 1 || escolha > 3);
                     break;
                 case 3:
+                    for (int i = 0; i < carroGrande.length; i++) {
+                        System.out.println(carroGrande[i]);
+                        System.out.println(placasCarroGrande[i]);
+                        System.out.println(horariosEntradaCarroGrande[i]);
+                    }
                     //registrarSaidaVeiculo();
                     break;
                 case 4:
