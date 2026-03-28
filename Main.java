@@ -32,7 +32,7 @@ public class Main
     public static void registrarEntradaVeiculo(int vetorRegistro[], String vetorPlaca[], double vetorHorario[]){
         for(int i = 0;i < vetorRegistro.length; i++ ){
             if(vetorRegistro[i] == 0){
-                vetorRegistro[i] == 1;
+                vetorRegistro[i] = 1;
                 break;
             }
             break;
@@ -40,7 +40,7 @@ public class Main
         imprime("Informe a placa");
         for(int i = 0;i < vetoRegistro.length; i++ ){
             if(vetorPlaca[i] == null){
-                vetorPlaca[i] == lerString();
+                vetorPlaca[i] = lerString();
                 break;
             }
             break;
