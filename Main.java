@@ -3,7 +3,7 @@ import java.util.Scanner;
 //haramaki
 public class Main
 {
-    //função que imprime conteúdo
+    //funçoes que imprime conteúdo
     public static void imprime(String texto){
         System.out.println(texto);
     }
@@ -29,34 +29,33 @@ public class Main
     }
 
     // REGISTRAR ENTRADA DE VEÍCULO - FUNCIONALIDADE 2
-    public static void registrarEntradaVeiculo(int vetorRegistro[], String vetorPlaca[], double vetorHorario[]) {
-        int posicao = -1;
-        // 1. encontrar vaga livre
+    //Separei em funções menores para ficar mais legivel na principal
+    //buscar vagas livre para usar posição
+    public static int buscarVagaLivre(int vetorRegistro[]) {
         for (int i = 0; i < vetorRegistro.length; i++) {
             if (vetorRegistro[i] == 0) {
-                posicao = i;
-                break;
+                return i;
             }
         }
-
-        if (posicao == -1) {
-            imprime("Estacionamento lotado!");
-            return;
-        }
-
-        // 2. ocupar vaga
-        vetorRegistro[posicao] = 1;
-
-        // 3. ler placa
+        return -1;
+    }
+    // função validar placa
+    public static String lerPlacaValida(){
         String placa;
         do {
+            //// verifica se tem '-' Perguntar se pode para validar -
+            //        for (int i = 0; i < placa.length(); i++) {
+            //            if (placa.charAt(i) == '-') {
+            //                temHifen = true;
+            //            }
+            //        }
             imprime("Informe a placa: ");
             placa = lerString();
         } while (placa.isEmpty());
-
-        vetorPlaca[posicao] = placa;
-
-        // 4. ler horário
+        return placa;
+    }
+    // Função validar horário
+    public static double lerHorarioValido() {
         double valor;
         int hora, minutos;
 
@@ -73,7 +72,50 @@ public class Main
 
         } while (hora < 0 || hora > 23 || minutos < 0 || minutos > 59);
 
-        vetorHorario[posicao] = valor;
+        return valor;
+    }
+
+    //principal função registrarEntrada
+    public static void registrarEntradaVeiculo(int vetorRegistro[], String vetorPlaca[], double vetorHorario[]) {
+        // buscar vaga
+        int posicao = buscarVagaLivre(vetorRegistro);
+        if (posicao == -1) {
+            imprime("Estacionamento lotado!");
+        }
+        // 2. ocupar vaga
+        vetorRegistro[posicao] = 1;
+        // 3. ler placa
+        vetorPlaca[posicao] = lerPlacaValida();
+        // 4. ler horário
+        vetorHorario[posicao] = lerHorarioValido();
+    }
+    // FUNCIONALIDADE 3 - REGISTRAR SAIDA
+    // varrer listas procurando a posição pela placa
+    public static int localizarVeículoPlaca(String placaBuscada, String[] placasCarroPequeno,
+                                             String[] placasCarroGrande, String[] placasMoto){
+        for (int i = 0; i < placasCarroPequeno.length; i++) {
+            if (placasCarroPequeno[i] != null && placasCarroPequeno[i].equals(placaBuscada)) {
+                return i;
+            }
+        }
+        for (int i = 0; i < placasCarroGrande.length; i++) {
+            if (placasCarroGrande[i] != null && placasCarroGrande[i].equals(placaBuscada)) {
+                return i;
+            }
+        }
+        for (int i = 0; i < placasMoto.length; i++) {
+            if (placasMoto[i] != null && placasMoto[i].equals(placaBuscada)) {
+                return i;
+            }
+        }
+        return -1; //não encontrado
+    }
+    public static void registrarSaidaVeiculo(String placaBuscada, String placasCarroPequeno[],
+                                             String placasCarroGrande[], String placasMoto[]){
+
+        int posicao = localizarVeículoPlaca(placaBuscada,placasCarroPequeno, placasCarroGrande, placasMoto );
+
+
     }
     public static void main(String[] args) {
         int[] carroPequeno = new int[100];
@@ -150,7 +192,11 @@ public class Main
                     } while (escolha < 1 || escolha > 3);
                     break;
                 case 3:
-                    //registrarSaidaVeiculo();
+                    imprime("Informe a placa a ser buscada: ");
+                    String placa = lerString();
+                    //LIMPA O BUFFER
+                    entrada.nextLine();
+                    registrarSaidaVeiculo(placa,placasCarroPequeno,placasCarroGrande,placasMoto);
                     break;
                 case 4:
                     //gerarRelatorioDiario();
