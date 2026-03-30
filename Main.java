@@ -12,12 +12,10 @@ public class Main
         imprime("- Escolha qual veículo:-\n" +
                                 "1 - Carro pequeno\n" +
                                 "2 - Carro Grande\n" +
-                                "3 - Moto");
+                                "3 - Moto\n" +
+                                "4 - Voltar ao menu principal");
     }
     //função de escolha para chamada dos metodos
-    //public static int escolhaSubmenu(int escolha){
-     //   
-    //}
     public static double lerDouble(){
         Scanner entrada = new Scanner(System.in);
         double valor = entrada.nextDouble();
@@ -88,7 +86,7 @@ public class Main
         do{
             //inicializa como true e vai mudando como false caso encontre algum erro
             horarioValido = true;
-            imprime("informe o horario de entrada (HH:MM): ");
+            imprime("informe o horario (HH:MM): ");
             horario = lerString();
             //Verifica se tem 5 caracteres e o ':' na posição correta
             if (horario.length() == 5 && horario.charAt(2) == ':') {
@@ -127,12 +125,50 @@ public class Main
         // 4. ler horário
         vetorHorario[posicao] = lerHorarioValido();
     }
-    // FUNCIONALIDADE 3 - REGISTRAR SAIDA
-    
+    // FUNCIONALIDADE 3 - 3.1 REGISTRAR SAIDA
+    //função para procurar o veículo
+    public static int procurarVeiculo(int vetorRegistro[], String vetorPlaca[]) {
+        boolean encontrado;
+        do{ 
+            imprime("Informe a placa do veículo que deseja registrar a saída: ");
+            String placa = lerPlacaValida();
+            encontrado = false;
+            for (int i = 0; i < vetorRegistro.length; i++) {
+                if (vetorRegistro[i] == 1 && vetorPlaca[i].equalsIgnoreCase(placa)) {
+                    encontrado = true;
+                    return i;
+                }
+            }
+            if (!encontrado) {
+                imprime("Veículo com placa " + placa + " não encontrado no estacionamento. Tente novamente.");
+            }
+        } while(!encontrado);
+            return -1;
+    }
+    //função para solicitar horário de saída
+    public static String solicitarHorarioSaida(){
+        String horarioSaida;
+        horarioSaida = lerHorarioValido();
+        return horarioSaida;
+    }
+    public static void registrarSaidaVeiculo(int vetorRegistro[], String vetorPlaca[], String vetorHorarioSaida[]) {
+        // procurar veículo
+        int posicao = procurarVeiculo(vetorRegistro, vetorPlaca);
+        if (posicao != -1) {
+            // solicitar horário de saída
+            String horarioSaida = solicitarHorarioSaida();
+            // registrar saída (colocar -1 onde tem 1, e adicionar hrario de saída no vetor saidaa)
+            vetorRegistro[posicao] = -1;
+            vetorPlaca[posicao] = null;
+            vetorHorarioSaida[posicao] = horarioSaida;
+        }
+    }
+
     public static void main(String[] args) {
         int[] carroPequeno = new int[100];
         String[] placasCarroPequeno = new String[100];
         String[] horariosEntradaCarroPequeno = new String[100];
+        String[] horariosSaidaCarroPequeno = new String[100];
         // Vetor que armazena o valor das TARIFAS - 3 primeiras horas na pos 0 e valor extra na pos 1.
         double[] valorTarifasCarroPequeno = new double[2];
 
@@ -140,12 +176,14 @@ public class Main
         int[] carroGrande = new int[100];
         String[] placasCarroGrande = new String[100];
         String[] horariosEntradaCarroGrande = new String[100];
+        String[] horariosSaidaCarroGrande = new String[100];
         // Vetor que armazena o valor das TARIFAS - 3 primeiras horas na pos 0 e valor extra na pos 1.
         double[] valorTarifasCarroGrande = new double[2];
 
         int[] moto = new int[100];
         String[] placasMoto = new String[100];
         String[] horariosEntradaMoto = new String[100];
+        String[] horariosSaidaMoto = new String[100];
         // Vetor que armazena o valor das TARIFAS - 3 primeiras horas na pos 0 e valor extra na pos 1.
         double[] valorTarifasMoto = new double[2];
 
@@ -173,10 +211,13 @@ public class Main
                             cadastrarTarifas(valorTarifasCarroGrande);
                         } else if (escolha == 3) {
                             cadastrarTarifas(valorTarifasMoto);
-                        } else {
+                        } else if (escolha == 4) {
+                            break;
+                        }
+                        else {
                             imprime("Veículo inválido!");
                         }
-                    } while (escolha < 1 || escolha > 3);
+                    } while (escolha < 1 || escolha > 4);
                     break;
                 case 2:
                     do {
@@ -188,13 +229,31 @@ public class Main
                             registrarEntradaVeiculo(carroGrande, placasCarroGrande, horariosEntradaCarroGrande);
                         } else if (escolha == 3) {
                             registrarEntradaVeiculo(moto, placasMoto, horariosEntradaMoto);
-                        } else {
+                        } else if (escolha == 4) {
+                            break;
+                        }
+                        else {
                             imprime("Veículo inválido!");
                         }
-                    } while (escolha < 1 || escolha > 3);
+                    } while (escolha < 1 || escolha > 4);
                     break;
                 case 3:
-                    
+                    do {
+                        subMenu();
+                        escolha = lerInt();
+                        if (escolha == 1) {
+                           registrarSaidaVeiculo(carroPequeno, placasCarroPequeno, horariosSaidaCarroPequeno);
+                        } else if (escolha == 2) {
+                           registrarSaidaVeiculo(carroGrande, placasCarroGrande, horariosSaidaCarroGrande);
+                        } else if (escolha == 3) {
+                           registrarSaidaVeiculo(moto, placasMoto, horariosSaidaMoto);
+                        } else if (escolha == 4) {
+                            break;
+                        }
+                        else {
+                            imprime("Veículo inválido!");
+                        }
+                    } while (escolha < 1 || escolha > 4);
                     break;
                 case 4:
                     //gerarRelatorioDiario();
