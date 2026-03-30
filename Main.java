@@ -7,13 +7,30 @@ public class Main
     public static void imprime(String texto){
         System.out.println(texto);
     }
+    //funçao para sintetizar o menu
+    public static void subMenu(){
+        imprime("- Escolha qual veículo:-\n" +
+                                "1 - Carro pequeno\n" +
+                                "2 - Carro Grande\n" +
+                                "3 - Moto");
+    }
+    //função de escolha para chamada dos metodos
+    //public static int escolhaSubmenu(int escolha){
+     //   
+    //}
     public static double lerDouble(){
         Scanner entrada = new Scanner(System.in);
-        return entrada.nextDouble();
+        double valor = entrada.nextDouble();
+        //LIMPA O BUFFER
+        entrada.nextLine();
+        return valor;
     }
     public static int lerInt(){
         Scanner entrada = new Scanner(System.in);
-        return entrada.nextInt();
+        int valor = entrada.nextInt();
+        //LIMPA O BUFFER
+        entrada.nextLine();
+        return valor;
     }
     public static String lerString(){
         Scanner entrada = new Scanner(System.in);
@@ -42,41 +59,46 @@ public class Main
     // função validar placa
     public static String lerPlacaValida(){
         String placa;
+        boolean placaValida;
         do {
-            //// verifica se tem '-' Perguntar se pode para validar -
-            //        for (int i = 0; i < placa.length(); i++) {
-            //            if (placa.charAt(i) == '-') {
-            //                temHifen = true;
-            //            }
-            //        }
-            imprime("Informe a placa: ");
+            placaValida = true;
+            imprime("Informe a placa com 7 caracteres: ");
             placa = lerString();
-        } while (placa.isEmpty());
+            if (placa.length() != 7) {
+                imprime("Placa deve conter exatamente 7 caracteres!");
+                placaValida = false;
+            }
+            for(int i = 0; i < placa.length(); i++){
+                if(placa.charAt(i) == '-' || placa.charAt(i) == ' '){
+                    imprime("Placa não pode conter espaços e hifens!");
+                    placaValida = false;
+                    break;
+                }
+            }
+            
+            
+        } while (!placaValida);
         return placa;
     }
     // Função validar horário
-    public static double lerHorarioValido() {
-        double valor;
-        int hora, minutos;
-
-        do {
-            imprime("Informe o horário (00.00): ");
-            valor = lerDouble();
-
-            hora = (int) valor;
-            minutos = (int) Math.round((valor - hora) * 100);
-
-            if (hora < 0 || hora > 23 || minutos < 0 || minutos > 59) {
-                imprime("Horário inválido!");
+    public static String lerHorarioValido() {
+        String horario;
+        do{
+        imprime("informe o horario de entrada (HH:MM): ");
+        horario = lerString();
+        for (int i = 0; i < horario.length(); i++) {
+            if(horario.charAt(i) == '-' || horario.charAt(i) == ' '){
+                imprime("Horário não pode conter espaços e hifens!");
             }
-
-        } while (hora < 0 || hora > 23 || minutos < 0 || minutos > 59);
-
-        return valor;
+        }
+        }while(horario.length() != 5 || horario.charAt(2) != ':' || horario.charAt(0) == '0' || horario.charAt(0) == '1' || horario.charAt(0) == '2' ||
+                horario.charAt(1) < '0' || horario.charAt(1) > '9' || horario.charAt(3) < '0' || horario.charAt(3) > '5' ||
+                horario.charAt(4) < '0' || horario.charAt(4) > '9');
+        return horario;
     }
 
     //principal função registrarEntrada
-    public static void registrarEntradaVeiculo(int vetorRegistro[], String vetorPlaca[], double vetorHorario[]) {
+    public static void registrarEntradaVeiculo(int vetorRegistro[], String vetorPlaca[], String vetorHorario[]) {
         // buscar vaga
         int posicao = buscarVagaLivre(vetorRegistro);
         if (posicao == -1) {
@@ -120,20 +142,20 @@ public class Main
     public static void main(String[] args) {
         int[] carroPequeno = new int[100];
         String[] placasCarroPequeno = new String[100];
-        double[] horariosEntradaCarroPequeno = new double[100];
+        String[] horariosEntradaCarroPequeno = new String[100];
         // Vetor que armazena o valor das TARIFAS - 3 primeiras horas na pos 0 e valor extra na pos 1.
         double[] valorTarifasCarroPequeno = new double[2];
 
 
         int[] carroGrande = new int[100];
         String[] placasCarroGrande = new String[100];
-        double[] horariosEntradaCarroGrande = new double[100];
+        String[] horariosEntradaCarroGrande = new String[100];
         // Vetor que armazena o valor das TARIFAS - 3 primeiras horas na pos 0 e valor extra na pos 1.
         double[] valorTarifasCarroGrande = new double[2];
 
         int[] moto = new int[100];
         String[] placasMoto = new String[100];
-        double[] horariosEntradaMoto = new double[100];
+        String[] horariosEntradaMoto = new String[100];
         // Vetor que armazena o valor das TARIFAS - 3 primeiras horas na pos 0 e valor extra na pos 1.
         double[] valorTarifasMoto = new double[2];
 
@@ -149,19 +171,12 @@ public class Main
                     "6. Sair\n" +
                     "Selecione uma opção:");
             opcao = entrada.nextInt();
-            //LIMPA O BUFFER
-            entrada.nextLine();
             switch (opcao) {
                 case 1:
                     int escolha;
                     do {
-                        imprime("- Escolha qual veículo quer cadastrar tarifa -\n" +
-                                "1 - Carro pequeno\n" +
-                                "2 - Carro Grande\n" +
-                                "3 - Moto");
+                        subMenu();
                         escolha = lerInt();
-                        //LIMPA O BUFFER
-                        entrada.nextLine();
                         if (escolha == 1) {
                             cadastrarTarifas(valorTarifasCarroPequeno);
                         } else if (escolha == 2) {
@@ -175,10 +190,7 @@ public class Main
                     break;
                 case 2:
                     do {
-                        imprime("- Escolha qual veículo quer resgistrar entrada -\n" +
-                                "1 - Carro pequeno\n" +
-                                "2 - Carro Grande\n" +
-                                "3 - Moto");
+                        subMenu();
                         escolha = lerInt();
                         if (escolha == 1) {
                             registrarEntradaVeiculo(carroPequeno, placasCarroPequeno, horariosEntradaCarroPequeno);
@@ -194,8 +206,6 @@ public class Main
                 case 3:
                     imprime("Informe a placa a ser buscada: ");
                     String placa = lerString();
-                    //LIMPA O BUFFER
-                    entrada.nextLine();
                     registrarSaidaVeiculo(placa,placasCarroPequeno,placasCarroGrande,placasMoto);
                     break;
                 case 4:
