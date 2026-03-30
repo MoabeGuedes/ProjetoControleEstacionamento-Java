@@ -61,6 +61,7 @@ public class Main
         String placa;
         boolean placaValida;
         do {
+            //inicializa como true e vai mudando como false caso encontre algum erro
             placaValida = true;
             imprime("Informe a placa com 7 caracteres: ");
             placa = lerString();
@@ -83,17 +84,36 @@ public class Main
     // Função validar horário
     public static String lerHorarioValido() {
         String horario;
+        Boolean horarioValido;
         do{
+        //inicializa como true e vai mudando como false caso encontre algum erro
+        horarioValido = true;
         imprime("informe o horario de entrada (HH:MM): ");
         horario = lerString();
+        //Verifica se o formato é correto
         for (int i = 0; i < horario.length(); i++) {
             if(horario.charAt(i) == '-' || horario.charAt(i) == ' '){
                 imprime("Horário não pode conter espaços e hifens!");
+                horarioValido = false;
             }
         }
-        }while(horario.length() != 5 || horario.charAt(2) != ':' || horario.charAt(0) == '0' || horario.charAt(0) == '1' || horario.charAt(0) == '2' ||
-                horario.charAt(1) < '0' || horario.charAt(1) > '9' || horario.charAt(3) < '0' || horario.charAt(3) > '5' ||
-                horario.charAt(4) < '0' || horario.charAt(4) > '9');
+        //Verifica se tem 5 caracteres e o ':' na posição correta
+        if (horario.length() != 5 || horario.charAt(2) != ':') {
+            imprime("Horário deve estar no formato HH:MM!");
+            horarioValido = false;
+        }
+        //Verifica se os caracteres são numéricos > 0 e < 24 na hora e > 0 e < 60 no minuto
+        int hora = Integer.parseInt(""+horario.charAt(0)+horario.charAt(1));
+        if(hora < 0 || hora > 23) {
+            imprime("Hora deve ser entre 00 e 23!");
+            horarioValido = false;
+        }
+        int minuto = Integer.parseInt(""+horario.charAt(3)+horario.charAt(4));
+        if(minuto < 0 || minuto > 59) {
+            imprime("Minuto deve ser entre 00 e 59!");
+            horarioValido = false;
+        }
+        } while(!horarioValido);
         return horario;
     }
 
