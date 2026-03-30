@@ -86,33 +86,29 @@ public class Main
         String horario;
         Boolean horarioValido;
         do{
-        //inicializa como true e vai mudando como false caso encontre algum erro
-        horarioValido = true;
-        imprime("informe o horario de entrada (HH:MM): ");
-        horario = lerString();
-        //Verifica se o formato é correto
-        for (int i = 0; i < horario.length(); i++) {
-            if(horario.charAt(i) == '-' || horario.charAt(i) == ' '){
-                imprime("Horário não pode conter espaços e hifens!");
+            //inicializa como true e vai mudando como false caso encontre algum erro
+            horarioValido = true;
+            imprime("informe o horario de entrada (HH:MM): ");
+            horario = lerString();
+            //Verifica se tem 5 caracteres e o ':' na posição correta
+            if (horario.length() == 5 && horario.charAt(2) == ':') {
+                //Usamos o integer parse para converter os caracteres em numeros e validar hora e minuto 
+                // e pesquisamos e vimos que em java "" + char converte o char para string para o parseInt funcionar"
+                int hora = Integer.parseInt("" + horario.charAt(0) + horario.charAt(1));
+                int minuto = Integer.parseInt("" + horario.charAt(3) + horario.charAt(4));
+            // valida hora e minuto
+                if(hora < 0 || hora > 23) {
+                    imprime("Hora deve ser entre 00 e 23!");
+                    horarioValido = false;
+                }
+                else if(minuto < 0 || minuto > 59) {
+                    imprime("Minuto deve ser entre 00 e 59!");
+                    horarioValido = false;
+                }
+            } else {
+                imprime("Horário deve estar no formato HH:MM!");
                 horarioValido = false;
             }
-        }
-        //Verifica se tem 5 caracteres e o ':' na posição correta
-        if (horario.length() != 5 || horario.charAt(2) != ':') {
-            imprime("Horário deve estar no formato HH:MM!");
-            horarioValido = false;
-        }
-        //Verifica se os caracteres são numéricos > 0 e < 24 na hora e > 0 e < 60 no minuto
-        int hora = Integer.parseInt(""+horario.charAt(0)+horario.charAt(1));
-        if(hora < 0 || hora > 23) {
-            imprime("Hora deve ser entre 00 e 23!");
-            horarioValido = false;
-        }
-        int minuto = Integer.parseInt(""+horario.charAt(3)+horario.charAt(4));
-        if(minuto < 0 || minuto > 59) {
-            imprime("Minuto deve ser entre 00 e 59!");
-            horarioValido = false;
-        }
         } while(!horarioValido);
         return horario;
     }
@@ -132,33 +128,7 @@ public class Main
         vetorHorario[posicao] = lerHorarioValido();
     }
     // FUNCIONALIDADE 3 - REGISTRAR SAIDA
-    // varrer listas procurando a posição pela placa
-    public static int localizarVeículoPlaca(String placaBuscada, String[] placasCarroPequeno,
-                                             String[] placasCarroGrande, String[] placasMoto){
-        for (int i = 0; i < placasCarroPequeno.length; i++) {
-            if (placasCarroPequeno[i] != null && placasCarroPequeno[i].equals(placaBuscada)) {
-                return i;
-            }
-        }
-        for (int i = 0; i < placasCarroGrande.length; i++) {
-            if (placasCarroGrande[i] != null && placasCarroGrande[i].equals(placaBuscada)) {
-                return i;
-            }
-        }
-        for (int i = 0; i < placasMoto.length; i++) {
-            if (placasMoto[i] != null && placasMoto[i].equals(placaBuscada)) {
-                return i;
-            }
-        }
-        return -1; //não encontrado
-    }
-    public static void registrarSaidaVeiculo(String placaBuscada, String placasCarroPequeno[],
-                                             String placasCarroGrande[], String placasMoto[]){
-
-        int posicao = localizarVeículoPlaca(placaBuscada,placasCarroPequeno, placasCarroGrande, placasMoto );
-
-
-    }
+    
     public static void main(String[] args) {
         int[] carroPequeno = new int[100];
         String[] placasCarroPequeno = new String[100];
@@ -224,9 +194,7 @@ public class Main
                     } while (escolha < 1 || escolha > 3);
                     break;
                 case 3:
-                    imprime("Informe a placa a ser buscada: ");
-                    String placa = lerString();
-                    registrarSaidaVeiculo(placa,placasCarroPequeno,placasCarroGrande,placasMoto);
+                    
                     break;
                 case 4:
                     //gerarRelatorioDiario();
