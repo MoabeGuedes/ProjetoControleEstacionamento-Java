@@ -1,1 +1,1 @@
-# ProjetoControleEstacionamento-Java
+agora quebra as funções usando subfunções menores porque essas seguintes funções estão muito grandes e fazendo mais de uma tarefa indo contra o conceito de função, registarSaidadeVeiculo, gerarRelatorioDiario, gerarRelatorioPorTipoVeiculo.
