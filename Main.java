@@ -96,12 +96,19 @@ public class Main {
                 return null; // null é o sinal de cancelamento para quem chamou este método
             }
 
-            if (placa.length() != 7) {
-                imprime("Erro: A placa deve conter exatamente 7 caracteres!");
-                placaValida = false;
-                continue; // volta para pedir de novo sem checar o resto
-            }
-
+          if (placa.length() != 7) {
+            imprime("Erro: A placa deve conter exatamente 7 caracteres!");
+            placaValida = false;
+} else {
+    // só verifica os caracteres se o tamanho já está correto
+    for (int i = 0; i < placa.length(); i++) {
+        if (placa.charAt(i) == '-' || placa.charAt(i) == ' ') {
+            imprime("Erro: A placa não pode conter espaços ou hífens!");
+            placaValida = false;
+            break;
+        }
+    }
+}
             // Verifica cada caractere em busca de espaço ou hífen
             for (int i = 0; i < placa.length(); i++) {
                 if (placa.charAt(i) == '-' || placa.charAt(i) == ' ') {
@@ -110,6 +117,7 @@ public class Main {
                     break;
                 }
             }
+            
 
         } while (!placaValida);
         return placa;
