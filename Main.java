@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 // Projeto 01 - Sistema de Controle de Estacionamento
 // Disciplina: Programação de Sistemas I - 2026-01
-// Autores: Moabe e Haramaki
+// Autores: Moabe RA:10748053 e Haramaki RA:10752924
 
 public class Main {
 
