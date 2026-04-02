@@ -670,7 +670,6 @@ public class Main {
                             imprime("Opção inválida! Tente novamente.");
                         }
                     } while (escolha < 1 || escolha > 4);
-                    entrada.nextLine(); // limpa buffer
                     break;
 
                 // ----- OPÇÃO 4: Relatório Diário -----
@@ -698,7 +697,6 @@ public class Main {
 
                 default:
                     imprime("\nOPÇÃO INVÁLIDA! Selecione uma opção entre 1 e 6.\n");
-                    entrada.nextLine(); // limpa buffer
             }
 
         } while (opcao != 6);
