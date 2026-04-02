@@ -5,8 +5,6 @@ import java.util.Scanner;
 // Autores: Moabe RA:10748053 e Haramaki RA:10752924
 
 public class Main {
-
-
     // MÉTODOS UTILITÁRIOS - usados em várias partes do sistema
    
 
@@ -25,26 +23,21 @@ public class Main {
     }
 
     // Lê um número decimal (double) do teclado e limpa o buffer
-    public static double lerDouble() {
-        Scanner entrada = new Scanner(System.in);
+    public static double lerDouble(Scanner entrada) {
         double valor = entrada.nextDouble();
         entrada.nextLine(); // limpa o buffer para não afetar a próxima leitura
-        entrada.close();
         return valor;
     }
 
     // Lê um número inteiro do teclado e limpa o buffer
-    public static int lerInt() {
-        Scanner entrada = new Scanner(System.in);
+    public static int lerInt(Scanner entrada) {
         int valor = entrada.nextInt();
         entrada.nextLine(); // limpa o buffer
-        entrada.close();
         return valor;
     }
 
     // Lê uma linha de texto do teclado
-    public static String lerString() {
-        Scanner entrada = new Scanner(System.in);
+    public static String lerString(Scanner entrada) {
         return entrada.nextLine();
     }
 
@@ -54,11 +47,11 @@ public class Main {
     // Cadastra as tarifas para um tipo de veículo
     // vetor[0] = valor fixo das 3 primeiras horas
     // vetor[1] = valor de cada hora adicional após as 3 primeiras
-    public static void cadastrarTarifas(double vetor[]) {
+    public static void cadastrarTarifas(double vetor[], Scanner entrada) {
         imprime("Informe o valor da tarifa das 3 primeiras horas: ");
-        vetor[0] = lerDouble();
+        vetor[0] = lerDouble(entrada);
         imprime("Informe o valor da tarifa de hora adicional: ");
-        vetor[1] = lerDouble();
+        vetor[1] = lerDouble(entrada);
         imprime("Tarifas cadastradas com sucesso!");
     }
 
@@ -83,13 +76,13 @@ public class Main {
     // Regras de validação:
     //   - deve ter exatamente 7 caracteres
     //   - não pode conter espaços ou hífens
-    public static String lerPlacaValida() {
+    public static String lerPlacaValida(Scanner entrada) {
         String placa;
         boolean placaValida;
         do {
             placaValida = true; // assume válida e verifica abaixo
             imprime("Informe a placa com 7 caracteres (ou digite 0 para voltar): ");
-            placa = lerString().toUpperCase(); // padroniza em maiúsculo para comparações consistentes
+            placa = lerString(entrada).toUpperCase(); // padroniza em maiúsculo para comparações consistentes
 
             // Verifica se o usuário quer cancelar a operação
             if (placa.equals("0")) {
@@ -121,13 +114,13 @@ public class Main {
     //   - ':' deve estar obrigatoriamente na posição 2
     //   - hora deve estar entre 00 e 23
     //   - minuto deve estar entre 00 e 59
-    public static String lerHorarioValido() {
+    public static String lerHorarioValido(Scanner entrada) {
         String horario;
         boolean horarioValido;
         do {
             horarioValido = true; // assume válido e verifica abaixo
             imprime("Informe o horário (HH:MM): ");
-            horario = lerString();
+            horario = lerString(entrada);
 
             if (horario.length() == 5 && horario.charAt(2) == ':') {
                 // Converte os dígitos de hora e minuto para inteiros.
@@ -164,7 +157,7 @@ public class Main {
     //   1. Busca uma vaga livre; encerra se o estacionamento estiver lotado
     //   2. Lê a placa — retorna sem registrar se o usuário cancelar (null)
     //   3. Marca a vaga como ocupada (1), armazena placa e horário de entrada
-    public static void registrarEntradaVeiculo(int vetorRegistro[], String vetorPlaca[], String vetorHorario[]) {
+    public static void registrarEntradaVeiculo(int vetorRegistro[], String vetorPlaca[], String vetorHorario[], Scanner entrada) {
         int posicao = buscarVagaLivre(vetorRegistro);
 
         if (posicao == -1) {
@@ -173,14 +166,14 @@ public class Main {
         }
 
         // lerPlacaValida retorna null se o usuário digitar "0" para cancelar
-        String placa = lerPlacaValida();
+        String placa = lerPlacaValida(entrada);
         if (placa == null) {
             return; // usuário cancelou, volta sem registrar nada
         }
 
         vetorRegistro[posicao] = 1;                 // marca vaga como ocupada
         vetorPlaca[posicao]    = placa;             // armazena a placa
-        vetorHorario[posicao]  = lerHorarioValido();// lê e armazena o horário de entrada
+        vetorHorario[posicao]  = lerHorarioValido(entrada);// lê e armazena o horário de entrada
         imprime("Entrada registrada com sucesso na vaga " + (posicao + 1) + "!");
     }
 
@@ -190,10 +183,10 @@ public class Main {
     // Procura um veículo pela placa entre as vagas ocupadas (status = 1).
     // Reutiliza lerPlacaValida(), então o usuário pode digitar "0" para cancelar.
     // Retorna o índice da vaga encontrada, ou -2 se o usuário cancelar.
-    public static int procurarVeiculo(int vetorRegistro[], String vetorPlaca[]) {
+    public static int procurarVeiculo(int vetorRegistro[], String vetorPlaca[], Scanner entrada) {
         boolean encontrado;
         do {
-            String placa = lerPlacaValida();
+            String placa = lerPlacaValida(entrada);
 
             // Se retornou null, o usuário digitou "0" para cancelar
             if (placa == null) {
@@ -239,11 +232,11 @@ public class Main {
 
     // Lê e valida o horário de saída, garantindo que seja >= ao horário de entrada.
     // Continua pedindo até o usuário informar um horário válido.
-    public static String lerHorarioSaidaValido(String horarioEntrada) {
+    public static String lerHorarioSaidaValido(String horarioEntrada, Scanner entrada) {
         String horarioSaida;
         int minutosEntrada = horarioParaMinutos(horarioEntrada);
         do {
-            horarioSaida = lerHorarioValido();
+            horarioSaida = lerHorarioValido(entrada);
             if (horarioParaMinutos(horarioSaida) < minutosEntrada) {
                 imprime("Erro: Horário de saída não pode ser anterior ao de entrada (" + horarioEntrada + ")!");
             }
@@ -268,9 +261,9 @@ public class Main {
     // Retorna um vetor double[] com duas posições:
     //   [0] = valor final a pagar (após desconto, se houver)
     //   [1] = valor do desconto concedido (0 se não for PIX)
-    public static double[] aplicarFormaPagamento(double valorOriginal) {
+    public static double[] aplicarFormaPagamento(double valorOriginal, Scanner entrada) {
         imprime("Forma de pagamento:\n1 - PIX (5% de desconto)\n2 - Outros");
-        int pagamento = lerInt();
+        int pagamento = lerInt(entrada);
 
         double desconto = 0;
         double valorFinal = valorOriginal;
@@ -340,19 +333,19 @@ public class Main {
             int vetorRegistro[], String vetorPlaca[], String vetorHorarioEntrada[],
             String vetorPlacaHistorico[], String vetorEntradaHistorico[],
             String vetorSaidaHistorico[], double vetorValorHistorico[],
-            int contadorHistorico[], double tarifas[], String nomeVeiculo) {
+            int contadorHistorico[], double tarifas[], String nomeVeiculo, Scanner entrada) {
 
-        int posicao = procurarVeiculo(vetorRegistro, vetorPlaca);
+        int posicao = procurarVeiculo(vetorRegistro, vetorPlaca, entrada);
         if (posicao == -2) return; // usuário cancelou; volta ao menu sem fazer nada
 
         // Captura os dados da vaga antes de qualquer alteração nos vetores
         String placa = vetorPlaca[posicao];
         String horarioEntrada = vetorHorarioEntrada[posicao];
 
-        String   horarioSaida  = lerHorarioSaidaValido(horarioEntrada);
+        String   horarioSaida  = lerHorarioSaidaValido(horarioEntrada, entrada);
         int[]    permanencia   = calcularPermanencia(horarioEntrada, horarioSaida);
         double   valorOriginal = calcularValor(permanencia[2], tarifas);
-        double[] pagamento = aplicarFormaPagamento(valorOriginal);
+        double[] pagamento = aplicarFormaPagamento(valorOriginal, entrada);
 
         exibirResumoSaida(placa, nomeVeiculo, horarioEntrada, horarioSaida,
                 permanencia, valorOriginal, pagamento);
@@ -608,6 +601,7 @@ public class Main {
                     "6. Sair\n" +
                     "Selecione uma opção:");
             opcao = entrada.nextInt();
+            entrada.nextLine(); // limpa buffer após nextInt
 
             int escolha;
             switch (opcao) {
@@ -616,13 +610,13 @@ public class Main {
                 case 1:
                     do {
                         subMenu();
-                        escolha = lerInt();
+                        escolha = lerInt(entrada);
                         if (escolha == 1) {
-                            cadastrarTarifas(valorTarifasCarroPequeno);
+                            cadastrarTarifas(valorTarifasCarroPequeno, entrada);
                         } else if (escolha == 2) {
-                            cadastrarTarifas(valorTarifasCarroGrande);
+                            cadastrarTarifas(valorTarifasCarroGrande, entrada);
                         } else if (escolha == 3) {
-                            cadastrarTarifas(valorTarifasMoto);
+                            cadastrarTarifas(valorTarifasMoto, entrada);
                         } else if (escolha == 4) {
                             break; // volta ao menu principal
                         } else {
@@ -635,13 +629,13 @@ public class Main {
                 case 2:
                     do {
                         subMenu();
-                        escolha = lerInt();
+                        escolha = lerInt(entrada);
                         if (escolha == 1) {
-                            registrarEntradaVeiculo(carroPequeno, placasCarroPequeno, horariosEntradaCarroPequeno);
+                            registrarEntradaVeiculo(carroPequeno, placasCarroPequeno, horariosEntradaCarroPequeno, entrada);
                         } else if (escolha == 2) {
-                            registrarEntradaVeiculo(carroGrande, placasCarroGrande, horariosEntradaCarroGrande);
+                            registrarEntradaVeiculo(carroGrande, placasCarroGrande, horariosEntradaCarroGrande, entrada);
                         } else if (escolha == 3) {
-                            registrarEntradaVeiculo(moto, placasMoto, horariosEntradaMoto);
+                            registrarEntradaVeiculo(moto, placasMoto, horariosEntradaMoto, entrada);
                         } else if (escolha == 4) {
                             break;
                         } else {
@@ -654,28 +648,29 @@ public class Main {
                 case 3:
                     do {
                         subMenu();
-                        escolha = lerInt();
+                        escolha = lerInt(entrada);
                         if (escolha == 1) {
                             registrarSaidaVeiculo(
                                     carroPequeno, placasCarroPequeno, horariosEntradaCarroPequeno,
                                     placasHistCp, entradaHistCp, saidaHistCp, valorHistCp,
-                                    contHistCp, valorTarifasCarroPequeno, "Carro Pequeno");
+                                    contHistCp, valorTarifasCarroPequeno, "Carro Pequeno", entrada);
                         } else if (escolha == 2) {
                             registrarSaidaVeiculo(
                                     carroGrande, placasCarroGrande, horariosEntradaCarroGrande,
                                     placasHistCg, entradaHistCg, saidaHistCg, valorHistCg,
-                                    contHistCg, valorTarifasCarroGrande, "Carro Grande");
+                                    contHistCg, valorTarifasCarroGrande, "Carro Grande", entrada);
                         } else if (escolha == 3) {
                             registrarSaidaVeiculo(
                                     moto, placasMoto, horariosEntradaMoto,
                                     placasHistMoto, entradaHistMoto, saidaHistMoto, valorHistMoto,
-                                    contHistMoto, valorTarifasMoto, "Moto");
+                                    contHistMoto, valorTarifasMoto, "Moto", entrada);
                         } else if (escolha == 4) {
                             break;
                         } else {
                             imprime("Opção inválida! Tente novamente.");
                         }
                     } while (escolha < 1 || escolha > 4);
+                    entrada.nextLine(); // limpa buffer
                     break;
 
                 // ----- OPÇÃO 4: Relatório Diário -----
@@ -703,6 +698,7 @@ public class Main {
 
                 default:
                     imprime("\nOPÇÃO INVÁLIDA! Selecione uma opção entre 1 e 6.\n");
+                    entrada.nextLine(); // limpa buffer
             }
 
         } while (opcao != 6);
