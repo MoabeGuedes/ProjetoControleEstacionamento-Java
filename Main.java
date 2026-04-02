@@ -10,12 +10,10 @@ public class Main {
     // MÉTODOS UTILITÁRIOS - usados em várias partes do sistema
     // =========================================================
 
-    // Imprime uma linha de texto no console
     public static void imprime(String texto) {
         System.out.println(texto);
     }
 
-    // Exibe o submenu de escolha de tipo de veículo
     public static void subMenu() {
         imprime("- Escolha qual veículo: -\n" +
                 "1 - Carro Pequeno\n" +
@@ -24,23 +22,20 @@ public class Main {
                 "4 - Voltar ao menu principal");
     }
 
-    // Lê um número decimal (double) do teclado e limpa o buffer
     public static double lerDouble() {
         Scanner entrada = new Scanner(System.in);
         double valor = entrada.nextDouble();
-        entrada.nextLine(); // limpa o buffer para não afetar a próxima leitura
+        entrada.nextLine();
         return valor;
     }
 
-    // Lê um número inteiro do teclado e limpa o buffer
     public static int lerInt() {
         Scanner entrada = new Scanner(System.in);
         int valor = entrada.nextInt();
-        entrada.nextLine(); // limpa o buffer
+        entrada.nextLine();
         return valor;
     }
 
-    // Lê uma linha de texto do teclado
     public static String lerString() {
         Scanner entrada = new Scanner(System.in);
         return entrada.nextLine();
@@ -50,9 +45,6 @@ public class Main {
     // FUNCIONALIDADE 1 - CADASTRAR TARIFAS
     // =========================================================
 
-    // Cadastra as tarifas para um tipo de veículo
-    // vetor[0] = valor das 3 primeiras horas
-    // vetor[1] = valor de cada hora adicional
     public static void cadastrarTarifas(double vetor[]) {
         imprime("Informe o valor da tarifa das 3 primeiras horas: ");
         vetor[0] = lerDouble();
@@ -65,8 +57,6 @@ public class Main {
     // FUNCIONALIDADE 2 - REGISTRAR ENTRADA DE VEÍCULO
     // =========================================================
 
-    // Percorre o vetor de controle e retorna o índice da primeira vaga livre (valor 0)
-    // Retorna -1 se todas as vagas estiverem ocupadas
     public static int buscarVagaLivre(int vetorRegistro[]) {
         for (int i = 0; i < vetorRegistro.length; i++) {
             if (vetorRegistro[i] == 0) {
@@ -76,69 +66,45 @@ public class Main {
         return -1;
     }
 
-    // Solicita e valida a placa do veículo.
-    // O usuário pode digitar "0" a qualquer momento para CANCELAR e voltar ao menu.
-    // Retorna a placa válida (em maiúsculo), ou null se o usuário cancelar.
-    // Regras de validação:
-    // - deve ter exatamente 7 caracteres
-    // - não pode conter espaços ou hífens
     public static String lerPlacaValida() {
         String placa;
         boolean placaValida;
         do {
-            placaValida = true; // assume válida e verifica abaixo
+            placaValida = true;
             imprime("Informe a placa com 7 caracteres (ou digite 0 para voltar): ");
-            placa = lerString().toUpperCase(); // padroniza em maiúsculo
+            placa = lerString().toUpperCase();
 
-            // Verifica se o usuário quer cancelar a operação
             if (placa.equals("0")) {
                 imprime("Operação cancelada. Voltando ao menu...");
-                return null; // null é o sinal de cancelamento para quem chamou este método
+                return null;
             }
 
-          if (placa.length() != 7) {
-            imprime("Erro: A placa deve conter exatamente 7 caracteres!");
-            placaValida = false;
-} else {
-    // só verifica os caracteres se o tamanho já está correto
-    for (int i = 0; i < placa.length(); i++) {
-        if (placa.charAt(i) == '-' || placa.charAt(i) == ' ') {
-            imprime("Erro: A placa não pode conter espaços ou hífens!");
-            placaValida = false;
-            break;
-        }
-    }
-}
-            // Verifica cada caractere em busca de espaço ou hífen
-            for (int i = 0; i < placa.length(); i++) {
-                if (placa.charAt(i) == '-' || placa.charAt(i) == ' ') {
-                    imprime("Erro: A placa não pode conter espaços ou hífens!");
-                    placaValida = false;
-                    break;
+            if (placa.length() != 7) {
+                imprime("Erro: A placa deve conter exatamente 7 caracteres!");
+                placaValida = false;
+            } else {
+                for (int i = 0; i < placa.length(); i++) {
+                    if (placa.charAt(i) == '-' || placa.charAt(i) == ' ') {
+                        imprime("Erro: A placa não pode conter espaços ou hífens!");
+                        placaValida = false;
+                        break;
+                    }
                 }
             }
-            
 
         } while (!placaValida);
         return placa;
     }
 
-    // Solicita e valida um horário no formato HH:MM:
-    // - deve ter exatamente 5 caracteres
-    // - ':' deve estar na posição 2
-    // - hora entre 00 e 23
-    // - minuto entre 00 e 59
     public static String lerHorarioValido() {
         String horario;
         boolean horarioValido;
         do {
-            horarioValido = true; // assume válido e verifica abaixo
+            horarioValido = true;
             imprime("Informe o horário (HH:MM): ");
             horario = lerString();
 
             if (horario.length() == 5 && horario.charAt(2) == ':') {
-                // Converte os dígitos de hora e minuto para inteiros
-                // Usamos "" + char para transformar o char em String antes de fazer parseInt
                 int hora = Integer.parseInt("" + horario.charAt(0) + horario.charAt(1));
                 int minuto = Integer.parseInt("" + horario.charAt(3) + horario.charAt(4));
 
@@ -158,37 +124,28 @@ public class Main {
         return horario;
     }
 
-    // Converte um horário "HH:MM" para o total em minutos
-    // Exemplo: "08:30" → 510 minutos
-    // Isso facilita o cálculo da diferença entre entrada e saída
     public static int horarioParaMinutos(String horario) {
         int hora = Integer.parseInt("" + horario.charAt(0) + horario.charAt(1));
         int minuto = Integer.parseInt("" + horario.charAt(3) + horario.charAt(4));
         return hora * 60 + minuto;
     }
 
-    // Registra a entrada de um veículo:
-    // 1. Busca vaga livre
-    // 2. Lê a placa — se o usuário cancelar (retorno null), encerra sem registrar
-    // 3. Marca a vaga como ocupada (1)
-    // 4. Lê e armazena o horário de entrada
     public static void registrarEntradaVeiculo(int vetorRegistro[], String vetorPlaca[], String vetorHorario[]) {
         int posicao = buscarVagaLivre(vetorRegistro);
 
         if (posicao == -1) {
             imprime("Estacionamento lotado! Não há vagas disponíveis.");
-            return; // encerra o método sem registrar
+            return;
         }
 
-        // Tenta ler a placa — lerPlacaValida retorna null se o usuário digitar "0"
         String placa = lerPlacaValida();
         if (placa == null) {
-            return; // usuário cancelou, volta sem registrar nada
+            return;
         }
 
-        vetorRegistro[posicao] = 1;                    // marca vaga como ocupada
-        vetorPlaca[posicao] = placa;                   // armazena a placa
-        vetorHorario[posicao] = lerHorarioValido();    // lê e armazena o horário de entrada
+        vetorRegistro[posicao] = 1;
+        vetorPlaca[posicao] = placa;
+        vetorHorario[posicao] = lerHorarioValido();
         imprime("Entrada registrada com sucesso na vaga " + (posicao + 1) + "!");
     }
 
@@ -196,27 +153,20 @@ public class Main {
     // FUNCIONALIDADE 3 - REGISTRAR SAÍDA DE VEÍCULO
     // =========================================================
 
-    // Procura um veículo pela placa no estacionamento.
-    // Só considera vagas com status 1 (ocupadas).
-    // Reutiliza lerPlacaValida(), então o usuário pode digitar "0" para cancelar.
-    // Retorna -2 se o usuário cancelar, ou o índice da vaga se encontrar o veículo.
     public static int procurarVeiculo(int vetorRegistro[], String vetorPlaca[]) {
         boolean encontrado;
         do {
-            // Reutiliza lerPlacaValida para aproveitar validações e a opção de cancelamento
             String placa = lerPlacaValida();
 
-            // Se retornou null, o usuário digitou "0" para cancelar
             if (placa == null) {
-                return -2; // código especial para indicar cancelamento
+                return -2;
             }
 
             encontrado = false;
             for (int i = 0; i < vetorRegistro.length; i++) {
-                // equalsIgnoreCase compara ignorando diferença entre maiúsculas e minúsculas
                 if (vetorRegistro[i] == 1 && vetorPlaca[i].equalsIgnoreCase(placa)) {
                     encontrado = true;
-                    return i; // retorna a posição do veículo encontrado
+                    return i;
                 }
             }
 
@@ -225,67 +175,45 @@ public class Main {
             }
 
         } while (!encontrado);
-        return -2; // nunca chega aqui, mas o Java exige um return no final
+        return -2;
     }
 
-    // Calcula o valor a pagar com base no tempo de permanência e na tarifa.
-    // Regra: primeiras 3 horas = tarifa fixa; cada hora acima disso = tarifa adicional.
-    // O tempo é arredondado para cima (cobra hora cheia).
     public static double calcularValor(int minutosTotal, double tarifas[]) {
-        // Math.ceil arredonda para cima
-        // Ex: 130 minutos → ceil(130/60.0) = ceil(2.166) = 3 horas
         int horasTotal = (int) Math.ceil(minutosTotal / 60.0);
 
         if (horasTotal <= 3) {
-            // Permanência dentro das primeiras 3 horas: cobra só a tarifa inicial
             return tarifas[0];
         } else {
-            // Cobra a tarifa inicial + horas excedentes × tarifa adicional
             int horasExtras = horasTotal - 3;
             return tarifas[0] + horasExtras * tarifas[1];
         }
     }
 
-    // Registra a saída de um veículo:
-    // 1. Localiza o veículo pela placa (com opção de cancelar digitando 0)
-    // 2. Lê o horário de saída validando que é >= horário de entrada
-    // 3. Calcula tempo de permanência e valor a pagar
-    // 4. Pergunta a forma de pagamento (desconto de 5% no PIX)
-    // 5. Exibe o resumo completo
-    // 6. Libera a vaga e salva os dados no histórico para os relatórios
-    public static void registrarSaidaVeiculo(
-            int vetorRegistro[], String vetorPlaca[], String vetorHorarioEntrada[],
-            String vetorPlacaHistorico[], String vetorEntradaHistorico[],
-            String vetorSaidaHistorico[], double vetorValorHistorico[],
-            int contadorHistorico[], double tarifas[], String nomeVeiculo) {
+    // --- SUBFUNÇÕES de registrarSaidaVeiculo ---
 
-        // Localiza o veículo — retorna -2 se o usuário cancelou digitando "0"
-        int posicao = procurarVeiculo(vetorRegistro, vetorPlaca);
-        if (posicao == -2) {
-            return; // usuário cancelou, volta ao menu sem fazer nada
-        }
-
-        // Lê o horário de saída garantindo que seja >= horário de entrada
+    // Lê o horário de saída garantindo que não seja anterior ao de entrada
+    public static String lerHorarioSaidaValido(String horarioEntrada) {
         String horarioSaida;
-        int minutosEntrada = horarioParaMinutos(vetorHorarioEntrada[posicao]);
-        int minutosSaida;
+        int minutosEntrada = horarioParaMinutos(horarioEntrada);
         do {
             horarioSaida = lerHorarioValido();
-            minutosSaida = horarioParaMinutos(horarioSaida);
-            if (minutosSaida < minutosEntrada) {
-                imprime("Erro: Horário de saída não pode ser anterior ao de entrada (" + vetorHorarioEntrada[posicao] + ")!");
+            if (horarioParaMinutos(horarioSaida) < minutosEntrada) {
+                imprime("Erro: Horário de saída não pode ser anterior ao de entrada (" + horarioEntrada + ")!");
             }
-        } while (minutosSaida < minutosEntrada);
+        } while (horarioParaMinutos(horarioSaida) < minutosEntrada);
+        return horarioSaida;
+    }
 
-        // Calcula tempo de permanência em horas e minutos
-        int minutosTotal = minutosSaida - minutosEntrada;
-        int horas = minutosTotal / 60;
-        int minutos = minutosTotal % 60;
+    // Retorna int[] com { horas, minutos, totalMinutos } de permanência
+    public static int[] calcularPermanencia(String horarioEntrada, String horarioSaida) {
+        int minutosEntrada = horarioParaMinutos(horarioEntrada);
+        int minutosSaida = horarioParaMinutos(horarioSaida);
+        int total = minutosSaida - minutosEntrada;
+        return new int[]{ total / 60, total % 60, total };
+    }
 
-        // Calcula o valor original a pagar de acordo com a tarifa do tipo de veículo
-        double valorOriginal = calcularValor(minutosTotal, tarifas);
-
-        // Pergunta a forma de pagamento
+    // Pergunta a forma de pagamento e retorna double[] com { valorFinal, desconto }
+    public static double[] aplicarFormaPagamento(double valorOriginal) {
         imprime("Forma de pagamento:\n1 - PIX (5% de desconto)\n2 - Outros");
         int pagamento = lerInt();
 
@@ -293,149 +221,201 @@ public class Main {
         double valorFinal = valorOriginal;
 
         if (pagamento == 1) {
-            // Aplica 5% de desconto para pagamento via PIX
             desconto = valorOriginal * 0.05;
             valorFinal = valorOriginal - desconto;
         }
+        return new double[]{ valorFinal, desconto };
+    }
 
-        // Salva a placa em variável local ANTES de limpar a vaga
-        // Importante: se limparmos vetorPlaca[posicao] antes de exibir o resumo,
-        // a placa some e o resumo fica incompleto
-        String placaSalva = vetorPlaca[posicao];
+    // Exibe o resumo formatado da saída no console
+    public static void exibirResumoSaida(String placa, String nomeVeiculo,
+            String horarioEntrada, String horarioSaida,
+            int[] permanencia, double valorOriginal, double[] pagamento) {
 
-        // Exibe o resumo da saída
         imprime("\n===== RESUMO DA SAÍDA =====");
-        imprime("Placa: " + placaSalva);
+        imprime("Placa: " + placa);
         imprime("Tipo de veículo: " + nomeVeiculo);
-        imprime("Horário de entrada: " + vetorHorarioEntrada[posicao]);
+        imprime("Horário de entrada: " + horarioEntrada);
         imprime("Horário de saída: " + horarioSaida);
-        imprime("Tempo de permanência: " + horas + "h " + minutos + "min");
+        imprime("Tempo de permanência: " + permanencia[0] + "h " + permanencia[1] + "min");
         imprime(String.format("Valor original: R$ %.2f", valorOriginal));
-        if (desconto > 0) {
-            imprime(String.format("Desconto (PIX 5%%): R$ %.2f", desconto));
+        if (pagamento[1] > 0) {
+            imprime(String.format("Desconto (PIX 5%%): R$ %.2f", pagamento[1]));
         }
-        imprime(String.format("Valor final pago: R$ %.2f", valorFinal));
+        imprime(String.format("Valor final pago: R$ %.2f", pagamento[0]));
         imprime("===========================\n");
+    }
 
-        // Salva os dados no histórico para uso nos relatórios (func. 4 e 5)
-        int idx = contadorHistorico[0]; // posição atual no vetor de histórico
-        vetorPlacaHistorico[idx] = placaSalva;
+    // Salva os dados do atendimento encerrado no histórico e libera a vaga
+    public static void salvarHistoricoELiberarVaga(
+            int posicao, String placa, String horarioSaida, double valorFinal,
+            int vetorRegistro[], String vetorPlaca[], String vetorHorarioEntrada[],
+            String vetorPlacaHistorico[], String vetorEntradaHistorico[],
+            String vetorSaidaHistorico[], double vetorValorHistorico[],
+            int contadorHistorico[]) {
+
+        int idx = contadorHistorico[0];
+        vetorPlacaHistorico[idx] = placa;
         vetorEntradaHistorico[idx] = vetorHorarioEntrada[posicao];
         vetorSaidaHistorico[idx] = horarioSaida;
         vetorValorHistorico[idx] = valorFinal;
-        contadorHistorico[0]++; // avança o ponteiro do histórico
+        contadorHistorico[0]++;
 
-        // Libera a vaga no estacionamento (só após ter salvo tudo)
+        // Libera a vaga somente após persistir os dados no histórico
         vetorRegistro[posicao] = 0;
         vetorPlaca[posicao] = null;
         vetorHorarioEntrada[posicao] = null;
+    }
+
+    // Orquestra as subfunções de saída, mantendo responsabilidade de fluxo
+    public static void registrarSaidaVeiculo(
+            int vetorRegistro[], String vetorPlaca[], String vetorHorarioEntrada[],
+            String vetorPlacaHistorico[], String vetorEntradaHistorico[],
+            String vetorSaidaHistorico[], double vetorValorHistorico[],
+            int contadorHistorico[], double tarifas[], String nomeVeiculo) {
+
+        int posicao = procurarVeiculo(vetorRegistro, vetorPlaca);
+        if (posicao == -2) return;
+
+        // Salva a placa antes de qualquer alteração nos vetores
+        String placa = vetorPlaca[posicao];
+        String horarioEntrada = vetorHorarioEntrada[posicao];
+
+        String horarioSaida = lerHorarioSaidaValido(horarioEntrada);
+        int[] permanencia = calcularPermanencia(horarioEntrada, horarioSaida);
+        double valorOriginal = calcularValor(permanencia[2], tarifas);
+        double[] pagamento = aplicarFormaPagamento(valorOriginal);
+
+        exibirResumoSaida(placa, nomeVeiculo, horarioEntrada, horarioSaida,
+                permanencia, valorOriginal, pagamento);
+
+        salvarHistoricoELiberarVaga(
+                posicao, placa, horarioSaida, pagamento[0],
+                vetorRegistro, vetorPlaca, vetorHorarioEntrada,
+                vetorPlacaHistorico, vetorEntradaHistorico,
+                vetorSaidaHistorico, vetorValorHistorico, contadorHistorico);
     }
 
     // =========================================================
     // FUNCIONALIDADE 4 - GERAR RELATÓRIO DIÁRIO
     // =========================================================
 
-    // Conta quantos veículos estão atualmente no estacionamento (status = 1)
     public static int contarVeiculosPresentes(int vetorRegistro[]) {
         int contador = 0;
         for (int i = 0; i < vetorRegistro.length; i++) {
-            if (vetorRegistro[i] == 1) {
-                contador++;
-            }
+            if (vetorRegistro[i] == 1) contador++;
         }
         return contador;
     }
 
-    // Gera o relatório diário consolidando dados de todos os tipos de veículo
+    // --- SUBFUNÇÕES de gerarRelatorioDiario ---
+
+    // Retorna o total de entradas do dia: veículos presentes + veículos que já saíram
+    public static int calcularTotalEntradas(
+            int carroPequeno[], int contHistCp[],
+            int carroGrande[], int contHistCg[],
+            int moto[], int contHistMoto[]) {
+
+        return contarVeiculosPresentes(carroPequeno) + contHistCp[0]
+             + contarVeiculosPresentes(carroGrande) + contHistCg[0]
+             + contarVeiculosPresentes(moto) + contHistMoto[0];
+    }
+
+    // Retorna int[] com { mediaHoras, mediaMinutos } de permanência entre todos os atendimentos
+    public static int[] calcularTempoMedioPermanencia(
+            String entradaHistCp[], String saidaHistCp[], int contHistCp[],
+            String entradaHistCg[], String saidaHistCg[], int contHistCg[],
+            String entradaHistMoto[], String saidaHistMoto[], int contHistMoto[]) {
+
+        int totalSaidas = contHistCp[0] + contHistCg[0] + contHistMoto[0];
+        int somaMinutos = 0;
+
+        for (int i = 0; i < contHistCp[0]; i++)
+            somaMinutos += horarioParaMinutos(saidaHistCp[i]) - horarioParaMinutos(entradaHistCp[i]);
+        for (int i = 0; i < contHistCg[0]; i++)
+            somaMinutos += horarioParaMinutos(saidaHistCg[i]) - horarioParaMinutos(entradaHistCg[i]);
+        for (int i = 0; i < contHistMoto[0]; i++)
+            somaMinutos += horarioParaMinutos(saidaHistMoto[i]) - horarioParaMinutos(entradaHistMoto[i]);
+
+        int mediaMinutos = (totalSaidas > 0) ? somaMinutos / totalSaidas : 0;
+        return new int[]{ mediaMinutos / 60, mediaMinutos % 60 };
+    }
+
+    // Soma o valor total arrecadado no dia considerando os três tipos de veículo
+    public static double calcularTotalArrecadado(
+            double valorHistCp[], int contHistCp[],
+            double valorHistCg[], int contHistCg[],
+            double valorHistMoto[], int contHistMoto[]) {
+
+        double total = 0;
+        for (int i = 0; i < contHistCp[0]; i++) total += valorHistCp[i];
+        for (int i = 0; i < contHistCg[0]; i++) total += valorHistCg[i];
+        for (int i = 0; i < contHistMoto[0]; i++) total += valorHistMoto[i];
+        return total;
+    }
+
+    // Exibe o relatório diário com os dados já calculados pelas subfunções
+    public static void exibirRelatorioDiario(int totalEntradas, int totalSaidas,
+            int[] tempoMedio, double totalArrecadado) {
+
+        imprime("\n===== RELATÓRIO DIÁRIO =====");
+        imprime("Total de veículos que entraram: " + totalEntradas);
+        imprime("Total de veículos que saíram: " + totalSaidas);
+        imprime("Tempo médio de permanência: " + tempoMedio[0] + "h " + tempoMedio[1] + "min");
+        imprime(String.format("Valor total arrecadado: R$ %.2f", totalArrecadado));
+        imprime("============================\n");
+    }
+
+    // Orquestra as subfunções do relatório diário
     public static void gerarRelatorioDiario(
             int carroPequeno[], int carroGrande[], int moto[],
             String placasHistCp[], String entradaHistCp[], String saidaHistCp[], double valorHistCp[], int contHistCp[],
             String placasHistCg[], String entradaHistCg[], String saidaHistCg[], double valorHistCg[], int contHistCg[],
             String placasHistMoto[], String entradaHistMoto[], String saidaHistMoto[], double valorHistMoto[], int contHistMoto[]) {
 
-        // Total de entradas = veículos ainda presentes + veículos que já saíram
-        int totalEntradas = contarVeiculosPresentes(carroPequeno) + contHistCp[0]
-                + contarVeiculosPresentes(carroGrande) + contHistCg[0]
-                + contarVeiculosPresentes(moto) + contHistMoto[0];
+        int totalEntradas = calcularTotalEntradas(
+                carroPequeno, contHistCp, carroGrande, contHistCg, moto, contHistMoto);
 
-        // Total de saídas = soma dos contadores de histórico dos três tipos
         int totalSaidas = contHistCp[0] + contHistCg[0] + contHistMoto[0];
 
-        // Soma os minutos de permanência de todos os veículos finalizados
-        int somaMinutos = 0;
-        for (int i = 0; i < contHistCp[0]; i++) {
-            somaMinutos += horarioParaMinutos(saidaHistCp[i]) - horarioParaMinutos(entradaHistCp[i]);
-        }
-        for (int i = 0; i < contHistCg[0]; i++) {
-            somaMinutos += horarioParaMinutos(saidaHistCg[i]) - horarioParaMinutos(entradaHistCg[i]);
-        }
-        for (int i = 0; i < contHistMoto[0]; i++) {
-            somaMinutos += horarioParaMinutos(saidaHistMoto[i]) - horarioParaMinutos(entradaHistMoto[i]);
-        }
+        int[] tempoMedio = calcularTempoMedioPermanencia(
+                entradaHistCp, saidaHistCp, contHistCp,
+                entradaHistCg, saidaHistCg, contHistCg,
+                entradaHistMoto, saidaHistMoto, contHistMoto);
 
-        // Calcula a média (o operador ternário evita divisão por zero)
-        int mediaMinutos = (totalSaidas > 0) ? somaMinutos / totalSaidas : 0;
-        int mediaHoras = mediaMinutos / 60;
-        int mediaMin = mediaMinutos % 60;
+        double totalArrecadado = calcularTotalArrecadado(
+                valorHistCp, contHistCp, valorHistCg, contHistCg, valorHistMoto, contHistMoto);
 
-        // Soma o valor total arrecadado no dia
-        double totalArrecadado = 0;
-        for (int i = 0; i < contHistCp[0]; i++) totalArrecadado += valorHistCp[i];
-        for (int i = 0; i < contHistCg[0]; i++) totalArrecadado += valorHistCg[i];
-        for (int i = 0; i < contHistMoto[0]; i++) totalArrecadado += valorHistMoto[i];
-
-        // Exibe o relatório
-        imprime("\n===== RELATÓRIO DIÁRIO =====");
-        imprime("Total de veículos que entraram: " + totalEntradas);
-        imprime("Total de veículos que saíram: " + totalSaidas);
-        imprime("Tempo médio de permanência: " + mediaHoras + "h " + mediaMin + "min");
-        imprime(String.format("Valor total arrecadado: R$ %.2f", totalArrecadado));
-        imprime("============================\n");
+        exibirRelatorioDiario(totalEntradas, totalSaidas, tempoMedio, totalArrecadado);
     }
 
     // =========================================================
     // FUNCIONALIDADE 5 - RELATÓRIO POR TIPO DE VEÍCULO
     // =========================================================
 
-    // Calcula a média dos valores pagos de um tipo de veículo
-    // quantidade = número de registros válidos no vetor
     public static double calcularMediaValor(double vetorValores[], int quantidade) {
-        if (quantidade == 0) return 0; // evita divisão por zero
+        if (quantidade == 0) return 0;
         double soma = 0;
-        for (int i = 0; i < quantidade; i++) {
-            soma += vetorValores[i];
-        }
+        for (int i = 0; i < quantidade; i++) soma += vetorValores[i];
         return soma / quantidade;
     }
 
-    // Gera o relatório separado por tipo de veículo
-    public static void gerarRelatorioTipoVeiculo(
-            int carroPequeno[], int carroGrande[], int moto[],
-            double valorHistCp[], int contHistCp[],
-            double valorHistCg[], int contHistCg[],
-            double valorHistMoto[], int contHistMoto[]) {
+    // --- SUBFUNÇÕES de gerarRelatorioTipoVeiculo ---
 
-        // Quantidade de atendimentos finalizados por tipo
-        int qtdCp = contHistCp[0];
-        int qtdCg = contHistCg[0];
-        int qtdMoto = contHistMoto[0];
+    // Retorna o nome do tipo de veículo com maior número de atendimentos
+    public static String determinarTipoMaisFrequente(int qtdCp, int qtdCg, int qtdMoto) {
+        if (qtdCp >= qtdCg && qtdCp >= qtdMoto) return "Carro Pequeno";
+        if (qtdCg >= qtdCp && qtdCg >= qtdMoto) return "Carro Grande";
+        return "Moto";
+    }
 
-        // Determina qual tipo de veículo teve mais atendimentos
-        String maisFrequente;
-        if (qtdCp >= qtdCg && qtdCp >= qtdMoto) {
-            maisFrequente = "Carro Pequeno";
-        } else if (qtdCg >= qtdCp && qtdCg >= qtdMoto) {
-            maisFrequente = "Carro Grande";
-        } else {
-            maisFrequente = "Moto";
-        }
+    // Exibe o relatório por tipo com os dados já calculados pelas subfunções
+    public static void exibirRelatorioTipoVeiculo(
+            int qtdCp, double mediaCp,
+            int qtdCg, double mediaCg,
+            int qtdMoto, double mediaMoto,
+            String maisFrequente) {
 
-        // Calcula a média de valor pago por tipo
-        double mediaCp = calcularMediaValor(valorHistCp, qtdCp);
-        double mediaCg = calcularMediaValor(valorHistCg, qtdCg);
-        double mediaMoto = calcularMediaValor(valorHistMoto, qtdMoto);
-
-        // Exibe o relatório
         imprime("\n===== RELATÓRIO POR TIPO DE VEÍCULO =====");
         imprime("Carros Pequenos atendidos: " + qtdCp);
         imprime(String.format("  Média de valor pago: R$ %.2f", mediaCp));
@@ -447,17 +427,35 @@ public class Main {
         imprime("==========================================\n");
     }
 
+    // Orquestra as subfunções do relatório por tipo de veículo
+    public static void gerarRelatorioTipoVeiculo(
+            int carroPequeno[], int carroGrande[], int moto[],
+            double valorHistCp[], int contHistCp[],
+            double valorHistCg[], int contHistCg[],
+            double valorHistMoto[], int contHistMoto[]) {
+
+        int qtdCp = contHistCp[0];
+        int qtdCg = contHistCg[0];
+        int qtdMoto = contHistMoto[0];
+
+        double mediaCp = calcularMediaValor(valorHistCp, qtdCp);
+        double mediaCg = calcularMediaValor(valorHistCg, qtdCg);
+        double mediaMoto = calcularMediaValor(valorHistMoto, qtdMoto);
+
+        String maisFrequente = determinarTipoMaisFrequente(qtdCp, qtdCg, qtdMoto);
+
+        exibirRelatorioTipoVeiculo(qtdCp, mediaCp, qtdCg, mediaCg, qtdMoto, mediaMoto, maisFrequente);
+    }
+
     // =========================================================
-    // MÉTODO PRINCIPAL - ponto de entrada do programa
+    // MÉTODO PRINCIPAL
     // =========================================================
     public static void main(String[] args) {
 
-        // ----- Vetores do estacionamento (vagas ativas) -----
-        // vetorRegistro: 0 = livre, 1 = ocupado
         int[] carroPequeno = new int[100];
         String[] placasCarroPequeno = new String[100];
         String[] horariosEntradaCarroPequeno = new String[100];
-        double[] valorTarifasCarroPequeno = new double[2]; // [0]=3h fixo, [1]=hora extra
+        double[] valorTarifasCarroPequeno = new double[2];
 
         int[] carroGrande = new int[100];
         String[] placasCarroGrande = new String[100];
@@ -469,16 +467,10 @@ public class Main {
         String[] horariosEntradaMoto = new String[100];
         double[] valorTarifasMoto = new double[2];
 
-        // ----- Vetores de histórico (veículos que já saíram) -----
-        // Separados dos vetores de vagas para não misturar dados ativos com finalizados.
-        // Tamanho 1000 para comportar muitos atendimentos no dia.
         String[] placasHistCp = new String[1000];
         String[] entradaHistCp = new String[1000];
         String[] saidaHistCp = new String[1000];
         double[] valorHistCp = new double[1000];
-        // Usamos vetor de tamanho 1 para o contador: em Java, int simples passado como
-        // parâmetro é copiado (não é referência), então o método não conseguiria alterar
-        // o valor original. Com vetor, passamos a referência e o método pode modificar contHistCp[0].
         int[] contHistCp = new int[1];
 
         String[] placasHistCg = new String[1000];
@@ -496,7 +488,6 @@ public class Main {
         Scanner entrada = new Scanner(System.in);
         int opcao;
 
-        // Loop principal: o menu se repete até o usuário escolher sair (opção 6)
         do {
             imprime("\n=== SISTEMA DE CONTROLE DE ESTACIONAMENTO ===\n" +
                     "1. Cadastrar Tarifas\n" +
@@ -507,12 +498,11 @@ public class Main {
                     "6. Sair\n" +
                     "Selecione uma opção:");
             opcao = entrada.nextInt();
-            entrada.nextLine(); // limpa o buffer após leitura do int
+            entrada.nextLine();
 
             int escolha;
             switch (opcao) {
 
-                // ----- OPÇÃO 1: Cadastrar Tarifas -----
                 case 1:
                     do {
                         subMenu();
@@ -524,14 +514,13 @@ public class Main {
                         } else if (escolha == 3) {
                             cadastrarTarifas(valorTarifasMoto);
                         } else if (escolha == 4) {
-                            break; // volta ao menu principal
+                            break;
                         } else {
                             imprime("Opção inválida! Tente novamente.");
                         }
                     } while (escolha < 1 || escolha > 4);
                     break;
 
-                // ----- OPÇÃO 2: Registrar Entrada -----
                 case 2:
                     do {
                         subMenu();
@@ -550,7 +539,6 @@ public class Main {
                     } while (escolha < 1 || escolha > 4);
                     break;
 
-                // ----- OPÇÃO 3: Registrar Saída -----
                 case 3:
                     do {
                         subMenu();
@@ -578,7 +566,6 @@ public class Main {
                     } while (escolha < 1 || escolha > 4);
                     break;
 
-                // ----- OPÇÃO 4: Relatório Diário -----
                 case 4:
                     gerarRelatorioDiario(
                             carroPequeno, carroGrande, moto,
@@ -587,7 +574,6 @@ public class Main {
                             placasHistMoto, entradaHistMoto, saidaHistMoto, valorHistMoto, contHistMoto);
                     break;
 
-                // ----- OPÇÃO 5: Relatório por Tipo -----
                 case 5:
                     gerarRelatorioTipoVeiculo(
                             carroPequeno, carroGrande, moto,
@@ -596,7 +582,6 @@ public class Main {
                             valorHistMoto, contHistMoto);
                     break;
 
-                // ----- OPÇÃO 6: Sair -----
                 case 6:
                     imprime("Encerrando o sistema. Até logo!");
                     break;
@@ -607,6 +592,6 @@ public class Main {
 
         } while (opcao != 6);
 
-        entrada.close(); // fecha o Scanner ao encerrar o programa
+        entrada.close();
     }
 }
