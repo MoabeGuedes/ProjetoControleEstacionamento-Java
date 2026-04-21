@@ -48,11 +48,18 @@ public class Main {
     // vetor[0] = valor fixo das 3 primeiras horas
     // vetor[1] = valor de cada hora adicional após as 3 primeiras
     public static void cadastrarTarifas(double vetor[], Scanner entrada) {
-        imprime("Informe o valor da tarifa das 3 primeiras horas: ");
-        vetor[0] = lerDouble(entrada);
-        imprime("Informe o valor da tarifa de hora adicional: ");
-        vetor[1] = lerDouble(entrada);
-        imprime("Tarifas cadastradas com sucesso!");
+        do{
+            imprime("Informe o valor da tarifa das 3 primeiras horas: ");
+            vetor[0] = lerDouble(entrada);
+            imprime("Informe o valor da tarifa de hora adicional: ");
+            vetor[1] = lerDouble(entrada);
+            if(vetor[0] <= 0 || vetor[1] <= 0){
+                imprime("Tarifas inválidas!");
+            }else{
+                imprime("Tarifas cadastradas com sucesso!");
+            }
+        }while(vetor[0] <= 0 || vetor[1] <= 0);
+        
     }
 
     // =========================================================
